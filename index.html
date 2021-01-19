@@ -2,37 +2,51 @@
 <html lang="en">
 <head>
   <meta charset = "UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
   
   <link rel="stylesheet" href = "style.css">
   <title>Snake</title>   
 </head>
 <body>
-  <canvas id="gc" width = "400" height="400"></canvas>
-  <script>
-    var canv;
-    var ctx;
+  <audio id="intro" loop src ="https://raw.githubusercontent.com/steverhee3/stepfunctionality/main/songs/Satie%20-%20Gymnop%C3%A9die%20No.%201.mp3"></audio>
+  <audio id="fruit" src = "https://raw.githubusercontent.com/steverhee3/stepfunctionality/main/songs/Brooks%20-%20If%20Only%20I%20Could.mp3" ></audio>   
+  <canvas id="gc" width = "900" height="900"></canvas>
+  <script type= "text/javascript">
+    document.getElementById('fruit').loop = true; 
+    document.getElementById('intro').loop = true; 
+    const sounds = ['intro', 'fruit'];
+    
+    function stopSongs () {
+  sounds.forEach(sound => {
+    const song = document.getElementById(sound)
+    song.pause()
+    song.currentTime = 0;
+  })
+}    
+setTimeout(startSong(), 10);
+setInterval(startSong(), 244);
+function startSong() {
+  stopSongs();
+  document.getElementById('intro').play();
+}
+
     window.onload=function(){
       canv=document.getElementById("gc");
       ctx= canv.getContext("2d");
       document.addEventListener("keydown", keyPush);
       setInterval(game, 1000/15);
     }
+   
+
     
-    /*window.onload(() =>{
-      canv=document.getElementById("gc");
-      ctx= canv.getContext("2d");
-      document.addEventListener("keydown", keyPush);
-      setInterval(game, 1000/15);
-    });*/
+     px=py=10;
+     gs=tc=30;
+     ax=ay=15;
+     xv=yv=0;
     
-    px=py=10;
-    gs=tc=20;
-    ax=ay=15;
-    xv=yv=0;
-    tail = 5;
-    trail = [];
+     tail = 3;
+     trail = [];
     function game() {
       px +=xv;
       py +=yv;
@@ -51,25 +65,26 @@
       ctx.fillStyle="black";
       ctx.fillRect(0,0, canv.width, canv.height);
       
-      ctx.fillStyle="lime";
+      ctx.fillStyle="#01FEDC";
       for(var i=0; i<trail.length; i++) {
         ctx.fillRect(trail[i].x*gs,trail[i].y*gs, gs-2, gs-2);
         if(trail[i].x==px && trail[i].y == py) {
-          tail = 5;
+          tail = 3;
         }
-    }   
-    
+    }  
+      trail.push({x:px, y:py});
+      while(trail.length> tail){
+        trail.shift();
+      }
+      
       if(ax == px && ay == py) {
         tail++;
         ax = Math.floor(Math.random()*tc);
         ay= Math.floor(Math.random()*tc);
       }
-      trail.push({x:px, y:py});
-      while(trail.length> tail){
-        trail.shift();
-      }
+      
     
-      ctx.fillStyle="red";
+      ctx.fillStyle="#F311AF";
       ctx.fillRect(ax*gs,ay*gs, gs-2, gs-2);
     }
     function keyPush(evt){
@@ -83,12 +98,12 @@
         case 39: 
           xv=1; yv=0;
           break;
-        case 40;
+        case 40:
           xv=0; yv=1;
           break;
       }
     }
-    
-  <script src="script.js"></script>
+  </script>
+
 </body>
 </html>  
